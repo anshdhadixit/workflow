@@ -82,26 +82,33 @@ AWS Amplify is a set of products and tools that enable mobile and front-end web 
 **1- Create an empty cluster**
 From the AWS console, click on the **'Services'** tab and click on **'Elastic Container Service'**. From the ECS page click on **'Clusters'** in the left-hand pane. Now, click on **'Create cluster'**. Select the **“EC2 Linux + Networking”** option and on the next page give your cluster a name. Tick the **'Create an empty cluster'** and click on **'Create'**.
 
-![image](image001.png)
+![image](Capture.jpg)
 
 **2- Create an ECR repository**
 To create an ECR repo go to the ECS console and select **'Repositories'** from the left-hand pane. Click on **'Create repository'**. Give the repository a name. Enable the **“Scan on push”** option and click on the **'Create repository'** button.
 
+![image](image001.png)
 
 **3- Create an application load balancer**
 From the EC2 console, click on **'Load Balancers'** from the left-hand pane.  Then click on **'Create load balancer'** and select **“Application Load Balancer”**. Give the load balancer a suitable name, select all the availability zones for your VPC and click **'Next'**. Skip to the **'Configure security groups'** stage and opt to create a new security group. Under **'Type'** select **"HTTP"** and **"Anywhere"** as the **'Source'**.
 Click “Next” and Create a new target group. Give the target group a name and make sure the protocol and port are set to “HTTP” and “80” respectively. Change the target type to “IP”. Under “Health checks” select the “HTTP” protocol again and for “path” select the path of your web app where you want your health checks to be done.
 
+![image](image004.jpg)
 
 **4- Create a task definition**
 Go to the ECS console and click on **'Task Definitions'**. Select **'Create task definition'** and select **'EC2'** compatibility option. Give your task definition a name. Select **"none"** for the IAM role and **“awsvpc”** for the network mode. Under task size set **'Task memory'** as **"2048"** and **'CPU'** as **"1024"**. Scroll down and click on **'Add container'**.
  
+![image](image005.jpg)
 
 Give the container a name and paste the image URI . For **'Port mappings'** add the container ports you want to use. The only one I’m using is port 80 of my container. Click on “Add” and you will be taken back to the task creation page. You should now see your container entry listed as part of the task definition. Then Click on **'Create'**.
 
+![image](image007.jpg)
+
 **5- Create an ECS service**
 Creating an ECS service. Go to the empty cluster you created earlier and under **'Services'** click on **'Create'**. Select the **'EC2'** launch type, give your service a name and put in **"1"** for the number of tasks. Click on **'Next'**. Select your cluster VPC and all the subnets available. Under **'Load balancing'** select **“Application Load Balancer”**, then select the load balancer you just created. Now, select your container port and click on **'Add to load balancer'**. Select the listener port we created with the load balancer i.e **“80:HTTP”** and change the path pattern to the default path for your web app click on **'Create service'**.
- 
+
+![image](image009.jpg)
+
 You’ll also see targets being registered inside the target group you just created on the EC2 console. You can monitor the health checks under the **'Targets'** section on your target group page.
 
 ### Create Code Pipeline
@@ -109,23 +116,34 @@ You’ll also see targets being registered inside the target group you just crea
 Code Pipeline will have 3 stages Source, Build and Deploy.
 Go to AWS Code Pipeline page and Click on Create Pipeline.
 1.	Enter Pipeline Name and Leave Default for Service Role and click Next
- 
+
+![image](image010.png)
 
 2. Select AWS Code Commit as a source provider. Select your Code Commit Repository and Branch Name. Go to Add Build Stage.
- 
+
+![image](image012.png)
 
 3. In build Provider select AWS CodeBuild. We need to have a CodeBuild Project for CodePipeline which will create Docker Image and push it to our ECR Repository. Click on Create Project under Project Name a new window will pop-up. Write project name and enter Configuration as shown below.
 
-    Make sure you check the **Privileged** check box. This will allow code build to build Docker images. 
+    ![image](image014.png)
 
+    Make sure you check the **Privileged** check box. This will allow code build to build Docker images. 
+    
+    ![image](image016.png)
+    
     Scroll down to build Spec and add build spec file name. My file name is “buildspec.yaml”
+    
+    ![image](image018.png)
  
     Leave everything as default and click on Continue to Code Pipeline. Your Code Build project name appears in Project Name section. Go to Add Deploy Stage.
- 
+
+![image](image020.png)
 
 4. Select Amazon ECS as a Deploy Provider. Select your ECS Cluster Name and Service Name. Type “imagedefinitions.json” in Image definition file field. This file is artifact (output) from our code build which includes information about our ECR Image location and our container name in task definition.
 Make sure you write same file name inside Image definition file field as you have written in buildspec.yaml file in artifacts block.
- 
+
+![image](image022.png)
+
 Review your Code Pipeline and click **Create Pipeline**.
 
 
