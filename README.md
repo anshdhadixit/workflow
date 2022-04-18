@@ -82,7 +82,7 @@ AWS Amplify is a set of products and tools that enable mobile and front-end web 
 **1- Create an empty cluster**
 From the AWS console, click on the **'Services'** tab and click on **'Elastic Container Service'**. From the ECS page click on **'Clusters'** in the left-hand pane. Now, click on **'Create cluster'**. Select the **“EC2 Linux + Networking”** option and on the next page give your cluster a name. Tick the **'Create an empty cluster'** and click on **'Create'**.
 
-![image](Capture.jpg)
+![image](Capture.JPG)
 
 **2- Create an ECR repository**
 To create an ECR repo go to the ECS console and select **'Repositories'** from the left-hand pane. Click on **'Create repository'**. Give the repository a name. Enable the **“Scan on push”** option and click on the **'Create repository'** button.
