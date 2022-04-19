@@ -103,7 +103,7 @@ From the AWS console, click on the **'Services'** tab and click on **'Elastic Co
 **2- Create an ECR repository**
 To create an ECR repo go to the ECS console and select **'Repositories'** from the left-hand pane. Click on **'Create repository'**. Give the repository a name. Enable the **“Scan on push”** option and click on the **'Create repository'** button.
 
-![image](image001.jpg)
+![image](image001.png)
 
 **3- Create an application load balancer**
 From the EC2 console, click on **'Load Balancers'** from the left-hand pane.  Then click on **'Create load balancer'** and select **“Application Load Balancer”**. Give the load balancer a suitable name, select all the availability zones for your VPC and click **'Next'**. Skip to the **'Configure security groups'** stage and opt to create a new security group. Under **'Type'** select **"HTTP"** and **"Anywhere"** as the **'Source'**.
